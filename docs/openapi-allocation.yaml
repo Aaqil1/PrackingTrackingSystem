@@ -1,0 +1,108 @@
+openapi: 3.0.3
+info:
+  title: Allocation Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8083/allocation
+paths:
+  /vehicles:
+    get:
+      summary: List onboarded vehicles
+      responses:
+        '200':
+          description: Vehicles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+    post:
+      summary: Onboard a vehicle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleRequest'
+      responses:
+        '201':
+          description: Vehicle onboarded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+  /vehicles/{id}:
+    get:
+      summary: Retrieve vehicle details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Vehicle details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+  /auto:
+    post:
+      summary: Auto-allocate vehicle for goods request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoodsAllocationRequest'
+      responses:
+        '200':
+          description: Auto allocation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoAllocationResponse'
+components:
+  schemas:
+    Vehicle:
+      type: object
+      properties:
+        id:
+          type: integer
+        registrationNumber:
+          type: string
+        model:
+          type: string
+        maxVolume:
+          type: number
+        maxQuantity:
+          type: integer
+    VehicleRequest:
+      type: object
+      required: [registrationNumber, model, maxVolume, maxQuantity]
+      properties:
+        registrationNumber:
+          type: string
+        model:
+          type: string
+        maxVolume:
+          type: number
+        maxQuantity:
+          type: integer
+    GoodsAllocationRequest:
+      type: object
+      required: [goodsVolume, goodsQuantity]
+      properties:
+        goodsVolume:
+          type: number
+        goodsQuantity:
+          type: integer
+    AutoAllocationResponse:
+      type: object
+      properties:
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        allocationComment:
+          type: string

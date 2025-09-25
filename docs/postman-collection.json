@@ -1,0 +1,130 @@
+{
+  "info": {
+    "name": "Parking Tracking System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Parking Lots",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/parking/lots",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["parking", "lots"]
+        }
+      }
+    },
+    {
+      "name": "Allocate Parking Slot",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"vehicleSize\": \"MEDIUM\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/parking/lots/1/arrival",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8081",
+          "path": ["parking", "lots", "1", "arrival"]
+        }
+      }
+    },
+    {
+      "name": "Routing Suggestion",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentCity\": \"Metropolis\",\n  \"vehicleSize\": \"MEDIUM\",\n  \"maximumDistanceKm\": 10\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8082/routing/suggestions",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["routing", "suggestions"]
+        }
+      }
+    },
+    {
+      "name": "Auto Allocate Vehicle",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"goodsVolume\": 90,\n  \"goodsQuantity\": 100\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8083/allocation/auto",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8083",
+          "path": ["allocation", "auto"]
+        }
+      }
+    },
+    {
+      "name": "List Job History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8084/jobs",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8084",
+          "path": ["jobs"]
+        }
+      }
+    },
+    {
+      "name": "List Telemetry Anomalies",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8085/telemetry/anomalies",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8085",
+          "path": ["telemetry", "anomalies"]
+        }
+      }
+    },
+    {
+      "name": "Create Driver Swap",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"originBranch\": \"Central Hub\",\n  \"destinationBranch\": \"East Branch\",\n  \"departureDate\": \"2024-05-20\",\n  \"driversInvolved\": \"Driver A, Driver B\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8086/driver-swaps",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8086",
+          "path": ["driver-swaps"]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+openapi: 3.0.3
+info:
+  title: Routing Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082/routing
+paths:
+  /options:
+    get:
+      summary: List parking options considered for routing
+      responses:
+        '200':
+          description: Routing options
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingSuggestion'
+  /suggestions:
+    post:
+      summary: Request routing suggestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequest'
+      responses:
+        '200':
+          description: Suggested parking option
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutingSuggestion'
+components:
+  schemas:
+    RoutingRequest:
+      type: object
+      required: [currentCity, vehicleSize]
+      properties:
+        currentCity:
+          type: string
+        preferredArea:
+          type: string
+        vehicleSize:
+          type: string
+        maximumDistanceKm:
+          type: number
+          default: 100
+    RoutingSuggestion:
+      type: object
+      properties:
+        optionId:
+          type: integer
+        lotName:
+          type: string
+        city:
+          type: string
+        area:
+          type: string
+        distanceKm:
+          type: number
+        availableSlots:
+          type: integer
+        supportedSizes:
+          type: string
