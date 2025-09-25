@@ -164,18 +164,15 @@ stateDiagram-v2
 ## Activity Diagram – Exception Handling Workflow
 ```mermaid
 flowchart TD
-    start((Start)) --> identify[Identify anomaly]
-    identify --> log[Log exception case]
-    log --> assign[Assign to operations agent]
-    assign --> investigate[Investigate root cause]
-    investigate --> decision{Carrier input required?}
-    decision -- Yes --> requestInfo[Request carrier details]
-    requestInfo --> updateCase[Update case with findings]
-    decision -- No --> updateCase
-    updateCase --> notify[Notify customer]
-    notify --> close{Issue resolved?}
-    close -- No --> investigate
-    close -- Yes --> end((End))
+    start([Start])
+    open{Exception occurs?}
+    open -- Yes --> handle[Handle Exception]
+    open -- No --> proceed[Proceed Normally]
+    handle --> log[Log Error]
+    log --> close{Can Recover?}
+    close -- Yes --> proceed
+    close -- No --> terminate([End])
+    proceed --> terminate
 ```
 
 ## Object Diagram – Sample Runtime Instances
