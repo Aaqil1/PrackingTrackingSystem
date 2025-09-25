@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: Job History Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8084/jobs
+paths:
+  /:
+    get:
+      summary: List job records
+      responses:
+        '200':
+          description: Job records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobRecord'
+    post:
+      summary: Create a job record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobRecordRequest'
+      responses:
+        '201':
+          description: Created job record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobRecord'
+  /{id}:
+    get:
+      summary: Get job record by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobRecord'
+components:
+  schemas:
+    JobRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        vehicleId:
+          type: string
+        description:
+          type: string
+        goodsVolume:
+          type: number
+        jobDate:
+          type: string
+          format: date
+        status:
+          type: string
+    JobRecordRequest:
+      type: object
+      required: [vehicleId, description, goodsVolume, jobDate, status]
+      properties:
+        vehicleId:
+          type: string
+        description:
+          type: string
+        goodsVolume:
+          type: number
+        jobDate:
+          type: string
+          format: date
+        status:
+          type: string

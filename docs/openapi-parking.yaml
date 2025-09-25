@@ -1,0 +1,156 @@
+openapi: 3.0.3
+info:
+  title: Parking Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/parking
+paths:
+  /lots:
+    get:
+      summary: List parking lots
+      responses:
+        '200':
+          description: Parking lots with occupancy and slots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParkingLot'
+    post:
+      summary: Create a parking lot with default slots
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateParkingLotRequest'
+      responses:
+        '201':
+          description: Created parking lot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingLot'
+  /lots/{lotId}/arrival:
+    post:
+      summary: Allocate slot for arriving vehicle
+      parameters:
+        - in: path
+          name: lotId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleArrivalRequest'
+      responses:
+        '200':
+          description: Allocated slot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingSlot'
+  /lots/{lotId}/departure:
+    post:
+      summary: Release slot when vehicle departs
+      parameters:
+        - in: path
+          name: lotId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleDepartureRequest'
+      responses:
+        '204':
+          description: Slot released
+  /lots/{lotId}/prediction:
+    get:
+      summary: Predict capacity requirement
+      parameters:
+        - in: path
+          name: lotId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Prediction details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingPrediction'
+components:
+  schemas:
+    ParkingLot:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        city:
+          type: string
+        area:
+          type: string
+        occupancyRate:
+          type: number
+          format: float
+        needAdditionalSlots:
+          type: boolean
+        slots:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParkingSlot'
+    ParkingSlot:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+        size:
+          type: string
+          enum: [SMALL, MEDIUM, LARGE]
+        occupied:
+          type: boolean
+    CreateParkingLotRequest:
+      type: object
+      required: [name, city, area]
+      properties:
+        name:
+          type: string
+        city:
+          type: string
+        area:
+          type: string
+    VehicleArrivalRequest:
+      type: object
+      required: [vehicleSize]
+      properties:
+        vehicleSize:
+          type: string
+          enum: [SMALL, MEDIUM, LARGE]
+    VehicleDepartureRequest:
+      type: object
+      required: [slotId]
+      properties:
+        slotId:
+          type: integer
+    ParkingPrediction:
+      type: object
+      properties:
+        parkingLotId:
+          type: integer
+        occupancyRate:
+          type: number
+        needAdditionalSlots:
+          type: boolean

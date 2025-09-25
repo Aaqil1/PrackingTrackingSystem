@@ -1,0 +1,141 @@
+openapi: 3.0.3
+info:
+  title: Driver Collaboration Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8086/driver-swaps
+paths:
+  /:
+    get:
+      summary: List driver swap plans
+      responses:
+        '200':
+          description: Swap plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DriverSwapPlan'
+    post:
+      summary: Create driver swap plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverSwapPlanRequest'
+      responses:
+        '201':
+          description: Created plan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverSwapPlan'
+  /{id}:
+    get:
+      summary: Get driver swap plan by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Plan details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverSwapPlan'
+  /summary:
+    get:
+      summary: Summary of swaps for a date range
+      parameters:
+        - in: query
+          name: start
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Summary metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverSwapSummary'
+components:
+  schemas:
+    DriverSwapPlan:
+      type: object
+      properties:
+        id:
+          type: integer
+        originBranch:
+          type: string
+        destinationBranch:
+          type: string
+        departureDate:
+          type: string
+          format: date
+        driversInvolved:
+          type: string
+        shiftStartTime:
+          type: string
+          format: time
+        shiftEndTime:
+          type: string
+          format: time
+        returnTripStartTime:
+          type: string
+          format: time
+        savedWaitTimeHours:
+          type: number
+        savedWaitCost:
+          type: number
+        notes:
+          type: string
+    DriverSwapPlanRequest:
+      type: object
+      required: [originBranch, destinationBranch, departureDate, driversInvolved, shiftStartTime, shiftEndTime, returnTripStartTime]
+      properties:
+        originBranch:
+          type: string
+        destinationBranch:
+          type: string
+        departureDate:
+          type: string
+          format: date
+        driversInvolved:
+          type: string
+        shiftStartTime:
+          type: string
+          format: time
+        shiftEndTime:
+          type: string
+          format: time
+        returnTripStartTime:
+          type: string
+          format: time
+        originalWaitTimeHours:
+          type: number
+        hourlyRate:
+          type: number
+        notes:
+          type: string
+    DriverSwapSummary:
+      type: object
+      properties:
+        plannedTrips:
+          type: integer
+        totalSavedHours:
+          type: number
+        totalSavedCost:
+          type: number
